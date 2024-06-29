@@ -90,7 +90,7 @@ if __name__ == "__main__":
                 ax.bar(selected_category, simple_weights, color='skyblue')
                 
                 # Add title and labels
-                ax.set_title('Bar Graph Example')
+                ax.set_title('Investment Split')
                 ax.set_xlabel('Stock')
                 ax.set_ylabel('Suggested Proportions of Investing')
                 
