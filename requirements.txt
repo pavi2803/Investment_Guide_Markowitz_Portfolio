@@ -1,0 +1,7 @@
+numpy
+yfinance 
+cvxopt
+pandas 
+streamlit
+datetime 
+matplotlib
