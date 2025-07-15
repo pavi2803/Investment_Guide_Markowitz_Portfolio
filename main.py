@@ -7,9 +7,37 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 
+# def download_stock_data(tickers, start_date, end_date):
+#     data = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
+#     st.write(data)
+#     return data
+
 def download_stock_data(tickers, start_date, end_date):
-    data = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
-    return data
+    raw_data = yf.download(tickers, start=start_date, end=end_date)
+
+
+    if raw_data.empty:
+        st.error("No data found. Please check the ticker symbols and date range.")
+        st.stop()
+
+    # Check for MultiIndex columns
+    if isinstance(raw_data.columns, pd.MultiIndex):
+        try:
+            adj_close = raw_data['Close']
+        except KeyError:
+            st.error("'Adj Close' not found in the data. Please try different tickers.")
+            st.stop()
+    else:
+        if 'Close' in raw_data.columns:
+            adj_close = raw_data[['Close']]
+        else:
+            st.error("'Closing price not found in the data.")
+            st.stop()
+
+    st.write("Adjusted Close data Overview:", adj_close.head())
+    return adj_close
+
+
 
 def calculate_returns_and_covariance(data):
     returns = data.pct_change().mean() * 252
@@ -67,6 +95,11 @@ if __name__ == "__main__":
                 
                 # Download data
                 stock_data = download_stock_data(selected_category, start_date, end_date)
+                adj_close = stock_data.dropna(axis=1, how='all')  # Drop tickers with all-NaN data
+                if adj_close.shape[1] < 2:
+                    st.error("At least two valid tickers are required with available data.")
+                    st.stop()
+
             ####################################################################
                 
                 # Calculate returns and covariance matrix
@@ -99,9 +132,6 @@ if __name__ == "__main__":
                                 
         else:
             st.write('No date selected.')
-        
-            
-        
             
         
     else:
