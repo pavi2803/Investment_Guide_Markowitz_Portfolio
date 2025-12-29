@@ -94,9 +94,6 @@ if __name__ == "__main__":
     dropdown_yf = ['AAPL', 'MSFT', 'AMZN', 'V', 'B', 'CMG','OLVI','LYFT','NVDA','NKE','TSLA', 'GOOG']
     selected_category = st.multiselect("Choose the stocks which you want to invest in ", dropdown_yf)
     
- 
-
-
     
     if(selected_category!=[] and len(selected_category)>2):
         start_date = st.date_input('Select a start date')
