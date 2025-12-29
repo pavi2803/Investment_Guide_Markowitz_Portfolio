@@ -133,43 +133,34 @@ if __name__ == "__main__":
                     
                     # Optimize portfolio
                     optimal_weights = optimize_portfolio(returns, cov_matrix)
-                    
+    
+                
                     st.write("Optimal proportion split for your investment:")
-                    # ... rest of your code
+                    for i in range(0,len(selected_category)):
+                        st.write(selected_category[i])
+                        st.text(f"{optimal_weights[i]}")
+                
+                    weights=optimal_weights.tolist()
                     
+                    simple_weights = [item[0] for item in weights]
+                        
+                
+                    fig, ax = plt.subplots()
+                    ax.bar(selected_category, simple_weights, color='skyblue')
+                    
+                    # Add title and labels
+                    ax.set_title('Investment Split')
+                    ax.set_xlabel('Stock')
+                    ax.set_ylabel('Suggested Proportions of Investing')
+                    
+                    # Display the plot in Streamlit
+                    st.pyplot(fig)
+
+
                 except ValueError as e:
                     st.error(f"❌ Cannot optimize portfolio: {str(e)}")
                     st.info("Try selecting different stocks or a longer date range with more historical data.")
                     st.stop()
-
-                
-                # # Calculate returns and covariance matrix
-                # returns, cov_matrix = calculate_returns_and_covariance(stock_data)
-    
-            
-                # # Optimize portfolio
-                # optimal_weights = optimize_portfolio(returns, cov_matrix)
-                
-                st.write("Optimal proportion split for your investment:")
-                for i in range(0,len(selected_category)):
-                    st.write(selected_category[i])
-                    st.text(f"{optimal_weights[i]}")
-               
-                weights=optimal_weights.tolist()
-                
-                simple_weights = [item[0] for item in weights]
-                    
-             
-                fig, ax = plt.subplots()
-                ax.bar(selected_category, simple_weights, color='skyblue')
-                
-                # Add title and labels
-                ax.set_title('Investment Split')
-                ax.set_xlabel('Stock')
-                ax.set_ylabel('Suggested Proportions of Investing')
-                
-                # Display the plot in Streamlit
-                st.pyplot(fig)
                                 
         else:
             st.write('No date selected.')
