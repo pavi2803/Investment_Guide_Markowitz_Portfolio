@@ -66,10 +66,16 @@ def optimize_portfolio(returns, cov_matrix):
     cov_matrix = cov_matrix + np.eye(num_assets) * 1e-8
     
     # Define the parameters for the quadratic optimization problem
+    # Minimize: 1/2 x^T Q x
+    # Subject to: Gx <= h, Ax = b
     Q = matrix(cov_matrix)
     c = matrix(np.zeros((num_assets, 1)))
-    G = matrix(np.concatenate((-np.array(returns).T, -np.identity(num_assets)), 0))
-    h = matrix(np.concatenate((-np.array([[0.0]]), np.zeros((num_assets, 1))), 0))
+    
+    # G matrix: [weights >= 0] -> [-I * weights <= 0]
+    G = matrix(-np.identity(num_assets))
+    h = matrix(np.zeros((num_assets, 1)))
+    
+    # A matrix: sum of weights = 1
     A = matrix(1.0, (1, num_assets))
     b = matrix(1.0)
     
@@ -84,7 +90,6 @@ def optimize_portfolio(returns, cov_matrix):
         return optimal_weights
     except Exception as e:
         raise ValueError(f"Optimization error: {str(e)}")
-####################################################################
 
 
 if __name__ == "__main__":
