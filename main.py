@@ -92,10 +92,20 @@ if __name__ == "__main__":
                 st.write('End date:', end_date)
  
                 
-                
-                # Download data
                 stock_data = download_stock_data(selected_category, start_date, end_date)
-                adj_close = stock_data.dropna(axis=1, how='all')  # Drop tickers with all-NaN data
+        
+                # Check for stocks with NaN values
+                nan_counts = stock_data.isna().sum()
+                stocks_with_nan = nan_counts[nan_counts > 0]
+                
+                if not stocks_with_nan.empty:
+                    st.error("⚠️ One or more stocks have missing data and cannot be used for optimization:")
+                    for stock, count in stocks_with_nan.items():
+                        st.write(f"- **{stock}**: {count} missing values out of {len(stock_data)} days")
+                    st.info("Please remove these stocks from your selection or choose a different date range.")
+                    st.stop()
+                
+                adj_close = stock_data.dropna(axis=1, how='all')
                 if adj_close.shape[1] < 2:
                     st.error("At least two valid tickers are required with available data.")
                     st.stop()
@@ -135,7 +145,7 @@ if __name__ == "__main__":
             
         
     else:
-        st.text("Please select 2 options to invest (This helps to split your investment)")
+        st.text("Please select atleast 2 options to invest (This helps to split your investment)")
     # Print results
     
     
