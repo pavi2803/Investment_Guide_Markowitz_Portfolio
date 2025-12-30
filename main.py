@@ -96,7 +96,7 @@ if __name__ == "__main__":
     # Input parameters
     
     st.header("Portfolio Optimization For Stock Returns")
-    dropdown_yf = ['AAPL', 'MSFT', 'AMZN', 'V', 'B', 'CMG','OLVI','LYFT','NVDA','NKE','TSLA', 'GOOG']
+    dropdown_yf = ['AAPL', 'MSFT', 'AMZN', 'V', 'B', 'CMG','OLVI','LYFT','NVDA','NKE','TSLA', 'GOOG','JNJ','WMT','MCD','SBUX','ABBV','DIS','NFLX','META','UNH']
     selected_category = st.multiselect("Choose the stocks which you want to invest in ", dropdown_yf)
     
     
